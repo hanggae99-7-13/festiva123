@@ -6,6 +6,8 @@ import jwt
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from werkzeug.utils import secure_filename
 
+import requests
+
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
@@ -110,6 +112,12 @@ def mypage():
 def fork():
     return render_template('fork.html')
 
+@app.route('/festival')
+def festival():
+ r = requests.get("http://api.data.go.kr/openapi/tn_pubr_public_cltur_fstvl_api?serviceKey=2%2FK1CdSKKycm%2FIyr1z09L2cFGNZIOO0uBgTNREIj3m8CbuZg5jcGqGzQV%2FhKIbphrEEOOeoxzwyj4vgco6M1bg%3D%3D&pageNo=0&numOfRows=100&type=json")
+ response = r.json()
+ items = response['response']['body']['items']
+ return render_template('festiv.html', items=items)
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
