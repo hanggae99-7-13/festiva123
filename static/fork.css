@@ -1,3 +1,10 @@
+* {
+    font-family: 'Gowun Dodum', sans-serif;
+}
+.mini_menu_text {
+    text-decoration: none;
+    color: black;
+}
 .btn-box {
     display: flex;
     justify-content: center;

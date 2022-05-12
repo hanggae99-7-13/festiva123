@@ -6,11 +6,13 @@
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
     <link href="{{ url_for('static', filename='fork.css') }}" rel="stylesheet">
 </head>
 <body>
-    <a href="/mypage/{{ user_info.username }}"><button class="myPage-btn">my page</button></a>
+    <div class="mini_menu">
+        <a href="/mypage/{{ user_info.username }}" class="mini_menu_text">마이페이지</a>
+    </div>
     <div class="image_container">
         <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb4KHWI%2FbtrBFc5oliW%2FCXqns41D4zlfsPZjFAm2qk%2Fimg.png")/>
     </div>
