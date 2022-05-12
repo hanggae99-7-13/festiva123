@@ -127,10 +127,35 @@ def fork():
 
 @app.route('/festival')
 def festival():
- r = requests.get("http://api.data.go.kr/openapi/tn_pubr_public_cltur_fstvl_api?serviceKey=2%2FK1CdSKKycm%2FIyr1z09L2cFGNZIOO0uBgTNREIj3m8CbuZg5jcGqGzQV%2FhKIbphrEEOOeoxzwyj4vgco6M1bg%3D%3D&pageNo=0&numOfRows=100&type=json")
- response = r.json()
- items = response['response']['body']['items']
- return render_template('festiv.html', items=items)
+    r = requests.get(
+        "http://api.data.go.kr/openapi/tn_pubr_public_cltur_fstvl_api?serviceKey=2%2FK1CdSKKycm%2FIyr1z09L2cFGNZIOO0uBgTNREIj3m8CbuZg5jcGqGzQV%2FhKIbphrEEOOeoxzwyj4vgco6M1bg%3D%3D&pageNo=0&numOfRows=100&type=json")
+    response = r.json()
+    items = response['response']['body']['items']
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
+        print(user_info)
+        return render_template('festiv.html', user_info=user_info, items=items)
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("home2", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("home2", msg="로그인 정보가 존재하지 않습니다."))
+
+@app.route('/review')
+def review_token():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
+        print(user_info)
+        return render_template('review.html', user_info=user_info)
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("home2", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("home2", msg="로그인 정보가 존재하지 않습니다."))
 
 @app.route('/review', methods=['POST'])
 def comment_post():
