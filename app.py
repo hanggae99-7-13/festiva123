@@ -19,7 +19,7 @@ import certifi
 
 ca = certifi.where()
 
-client = MongoClient('mongodb+srv://test:sparta@cluster0.sijdl.mongodb.net/Cluster0?retryWrites=true&w=majority', tlsCAFile=ca)
+client = MongoClient('mongodb+srv://test:sparta@cluster0.lovi7.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.dbsparta  # dbsparta 는 변경
 
 
@@ -143,19 +143,6 @@ def festival():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("home2", msg="로그인 정보가 존재하지 않습니다."))
 
-@app.route('/review')
-def review_token():
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.users.find_one({"username": payload["id"]})
-        print(user_info)
-        return render_template('review.html', user_info=user_info)
-
-    except jwt.ExpiredSignatureError:
-        return redirect(url_for("home2", msg="로그인 시간이 만료되었습니다."))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for("home2", msg="로그인 정보가 존재하지 않습니다."))
 
 @app.route('/review', methods=['POST'])
 def comment_post():
@@ -187,7 +174,17 @@ def comment_post():
 @app.route("/review", methods=["GET"])
 def comment_get():
     comment_list = list(db.festivareview.find({}, {'_id': False}))
-    return render_template("review.html", rows=comment_list)
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
+        print(user_info)
+        return render_template('review.html', user_info=user_info, rows=comment_list)
+
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("home2", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("home2", msg="로그인 정보가 존재하지 않습니다."))
 
 
 
