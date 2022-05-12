@@ -10,7 +10,7 @@
     <link href="{{ url_for('static', filename='fork.css') }}" rel="stylesheet">
 </head>
 <body>
-    <a href="/mypage"><button class="myPage-btn">my page</button></a>
+    <a href="/mypage/{{ user_info.username }}"><button class="myPage-btn">my page</button></a>
     <div class="image_container">
         <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb4KHWI%2FbtrBFc5oliW%2FCXqns41D4zlfsPZjFAm2qk%2Fimg.png")/>
     </div>
